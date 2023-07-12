@@ -11,11 +11,12 @@ def binParaDec(binario):
     fila = [] #cria uma fila vazia
     for digito in binario: #adiciona cada dígito do número binário na fila
         fila.append(int(digito))
-
+    print(f'fila {fila}')
     numeroDec = 0 #inicializa a variável com zero
 
     while len(fila) > 0: #processa cada dígito da fila
         digito = fila.pop(0) #remove o primeiro dígito da fila
+        print(f'digito {digito}')
         posicaoFila = 2 ** (len(fila)) #calcula o valor da posição correspondente
         numeroDec += digito * posicaoFila #multiplica o dígito pelo valor da posição e adiciona ao resultado
     return numeroDec
