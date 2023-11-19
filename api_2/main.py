@@ -1,49 +1,15 @@
-from fastapi import FastAPI, HTTPException, status
-from typing import Optional
-from models import Curso
+from fastapi import FastAPI
+from core.configs import settings
+from api.v1.api import api_router
 
-app = FastAPI()
+app = FastAPI(title='Api cadastro de cursos')
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
-cursos = {
-    1: {
-        "titulo": "curso BA - ADS",
-        "aulas": 10,
-        "horas": 60
-    },
-    2: {
-        "titulo": "curso BA - ARQ",
-        "aulas": 8,
-        "horas": 100
-    },
-    3: {
-        "titulo": "curso BA - MD",
-        "aulas": 12,
-        "horas": 50
-    }
-}
+# /api/v1/cursos
+# /api/v1/usuarios
 
-@app.get('/cursos')
-async def get_cursos():
-    return cursos
-
-@app.get('/cursos/{curso_id}')
-async def get_cursos(curso_id: int):
-    try:
-        curso = cursos [curso_id]
-        curso.update({"Id": curso_id})
-    except KeyError:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Curso inexistente')
-    return curso
-
-@app.post('/cursos')
-async def post_curso(curso: Curso):
-    if curso.id not in cursos:
-        cursos[curso.id] = curso
-        return curso
-    else:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f'Conflito de ID = {curso.id}')
-
-if __name__=='__main__':
+if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000,
+                log_level='info', reload=True)
